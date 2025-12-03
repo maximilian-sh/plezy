@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import '../services/platform_specific/platform_helper.dart' show Platform;
 import 'package:flutter/material.dart';
 import '../services/fullscreen_state_manager.dart';
 

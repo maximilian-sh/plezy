@@ -870,9 +870,14 @@ class PlexClient {
   /// Get consolidated video playback data (URL, media info, and versions) in a single API call
   /// This method combines the functionality of getVideoUrl(), getMediaInfo(), and getMediaVersions()
   /// to reduce redundant API calls during video playback initialization.
+  /// Get consolidated video playback data (URL, media info, and versions) in a single API call
+  /// This method combines the functionality of getVideoUrl(), getMediaInfo(), and getMediaVersions()
+  /// to reduce redundant API calls during video playback initialization.
   Future<PlexVideoPlaybackData> getVideoPlaybackData(
     String ratingKey, {
     int mediaIndex = 0,
+    String? transcodeProtocol, // 'hls', 'dash', or null for direct play/stream
+    int? startTime,
   }) async {
     final response = await _dio.get('/library/metadata/$ratingKey');
     final metadataJson = _getFirstMetadataJson(response);
@@ -905,7 +910,36 @@ class PlexClient {
 
         if (partKey != null) {
           // Get video URL
-          videoUrl = '${config.baseUrl}$partKey?X-Plex-Token=${config.token}';
+          if (transcodeProtocol == 'hls') {
+            // Generate HLS transcoding URL
+            final path = '/library/metadata/$ratingKey';
+            final params = {
+              'path': Uri.encodeComponent(path),
+              'mediaIndex': mediaIndex.toString(),
+              'partIndex': '0',
+              'protocol': 'hls',
+              'offset': ((startTime ?? 0) ~/ 1000).toString(),
+              'fastSeek': '1',
+              'directPlay': '0',
+              'directStream': '1',
+              'subtitleSize': '100',
+              'audioBoost': '100',
+              'location': 'lan',
+              'X-Plex-Platform': 'Chrome',
+              'X-Plex-Platform-Version': '1.0',
+              'X-Plex-Product': 'Plezy',
+              'X-Plex-Device': 'Web',
+              'X-Plex-Token': config.token,
+            };
+            final queryString = params.entries
+                .map((e) => '${e.key}=${e.value}')
+                .join('&');
+            videoUrl =
+                '${config.baseUrl}/video/:/transcode/universal/start.m3u8?$queryString';
+            print('PlexClient: Generated HLS URL: $videoUrl');
+          } else {
+            videoUrl = '${config.baseUrl}$partKey?X-Plex-Token=${config.token}';
+          }
 
           // Parse streams (audio and subtitle tracks) for media info
           final streams = part['Stream'] as List<dynamic>? ?? [];

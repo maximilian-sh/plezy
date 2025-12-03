@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/plex_image.dart';
 import '../client/plex_client.dart';
 import '../widgets/focus/focus_indicator.dart';
 import '../models/plex_metadata.dart';
@@ -301,7 +301,7 @@ class _EpisodeCardState extends State<_EpisodeCard>
                             child: episode.thumb != null
                                 ? Builder(
                                     builder: (context) {
-                                      return CachedNetworkImage(
+                                      return PlexImage(
                                         imageUrl: widget.client.getThumbnailUrl(
                                           episode.thumb,
                                         ),

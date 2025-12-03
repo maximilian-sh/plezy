@@ -1,4 +1,4 @@
-import 'package:os_media_controls/os_media_controls.dart';
+import 'platform_specific/os_media_controls_helper.dart';
 import 'package:rate_limiter/rate_limiter.dart';
 
 import '../client/plex_client.dart';

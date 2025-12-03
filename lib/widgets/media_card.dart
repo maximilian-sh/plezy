@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/plex_image.dart';
 import 'package:provider/provider.dart';
 import 'focus/focus_indicator.dart';
 import 'hub_navigation_controller.dart';
@@ -990,7 +990,7 @@ Widget _buildPosterImage(BuildContext context, dynamic item) {
             (constraints.maxHeight.isFinite ? constraints.maxHeight : 240) *
             devicePixelRatio;
 
-        return CachedNetworkImage(
+        return PlexImage(
           imageUrl: client.getThumbnailUrl(posterUrl!),
           fit: BoxFit.cover,
           width: double.infinity,
@@ -1000,7 +1000,7 @@ Widget _buildPosterImage(BuildContext context, dynamic item) {
           memCacheWidth: targetWidth.clamp(120, 800).round(),
           memCacheHeight: targetHeight.clamp(180, 1200).round(),
           filterQuality: FilterQuality.medium,
-          fadeInDuration: const Duration(milliseconds: 300),
+          // fadeInDuration: const Duration(milliseconds: 300), // Not supported by Image.network directly in the same way, but handled by PlexImage wrapper if needed or ignored
           placeholder: (context, url) => const SkeletonLoader(),
           errorWidget: (context, url, error) => Container(
             color: Theme.of(context).colorScheme.surfaceContainerHighest,

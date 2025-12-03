@@ -32,6 +32,8 @@ dependencies:
       url: https://github.com/edde746/os-media-controls
       ref: 75dc5642cd148c54c03fe96976702b8d31c48599
   rate_limiter: ^1.0.0
+  video_player: ^2.10.1
+  video_player_web_hls: ^1.3.0
 
 dev_dependencies:
   flutter_test:

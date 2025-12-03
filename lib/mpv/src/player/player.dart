@@ -1,14 +1,19 @@
-import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
+import 'dart:io'
+    if (dart.library.html) '../../../services/platform_specific/platform_stub.dart';
 
 import '../models/audio_device.dart';
 import '../models/media.dart';
 import '../models/audio_track.dart';
 import '../models/subtitle_track.dart';
-import 'player_native.dart';
 import 'player_state.dart';
 import 'player_streams.dart';
-import 'platform/player_linux.dart';
-import 'platform/player_windows.dart';
+import 'platform/player_web.dart';
+import 'player_native.dart';
+// Conditional imports for platform-specific implementations
+import 'player_impl_stub.dart'
+    if (dart.library.io) 'player_impl_io.dart'
+    as impl;
 
 /// Abstract interface for the video player.
 ///
@@ -204,16 +209,21 @@ abstract class Player {
   /// - macOS/iOS/Android: [PlayerNative] using MPVKit/libmpv with texture rendering
   /// - Windows: [PlayerWindows] using libmpv with native window embedding
   /// - Linux: [PlayerLinux] using libmpv with OpenGL rendering via GtkGLArea
+  /// - Web: [PlayerWeb] (Stub)
   factory Player() {
+    // Web support
+    if (kIsWeb) {
+      return PlayerWeb();
+    }
+
+    // Platform-specific implementations
     if (Platform.isMacOS || Platform.isIOS || Platform.isAndroid) {
       return PlayerNative();
     }
-    if (Platform.isWindows) {
-      return PlayerWindows();
-    }
-    if (Platform.isLinux) {
-      return PlayerLinux();
-    }
-    throw UnsupportedError('Player is not supported on this platform');
+
+    // For other platforms, we delegate to the implementation helper
+    // which handles the imports for Windows/Linux to avoid compilation errors
+    // on platforms where those libraries might not be available
+    return impl.createPlayer();
   }
 }

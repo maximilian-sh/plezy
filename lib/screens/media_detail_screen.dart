@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/plex_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -94,7 +95,9 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
         // Focus the play button after loading
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          _playButtonFocusNode.requestFocus();
+          if (mounted && _playButtonFocusNode.canRequestFocus) {
+            _playButtonFocusNode.requestFocus();
+          }
         });
 
         // Load seasons if it's a show
@@ -112,7 +115,9 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
       // Focus the play button after loading
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _playButtonFocusNode.requestFocus();
+        if (mounted && _playButtonFocusNode.canRequestFocus) {
+          _playButtonFocusNode.requestFocus();
+        }
       });
 
       if (widget.metadata.type.toLowerCase() == 'show') {
@@ -127,7 +132,9 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
       // Focus the play button after loading
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _playButtonFocusNode.requestFocus();
+        if (mounted && _playButtonFocusNode.canRequestFocus) {
+          _playButtonFocusNode.requestFocus();
+        }
       });
 
       if (widget.metadata.type.toLowerCase() == 'show') {
@@ -391,7 +398,6 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
     return Scaffold(
       body: Focus(
-        autofocus: true,
         onKeyEvent: (node, event) {
           if (isBackKeyEvent(event)) {
             Navigator.pop(context, _watchStateChanged);
@@ -419,7 +425,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                       Builder(
                         builder: (context) {
                           final client = _getClientForMetadata(context);
-                          return CachedNetworkImage(
+                          return PlexImage(
                             imageUrl: client.getThumbnailUrl(metadata.art),
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
@@ -480,7 +486,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                                       final client = _getClientForMetadata(
                                         context,
                                       );
-                                      return CachedNetworkImage(
+                                      return PlexImage(
                                         imageUrl: client.getThumbnailUrl(
                                           metadata.clearLogo,
                                         ),

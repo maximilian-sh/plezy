@@ -1,6 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'dart:io'
+    if (dart.library.html) '../../../../services/platform_specific/platform_stub.dart';
 
 import '../../../mpv/mpv.dart';
 import '../../../services/settings_service.dart';

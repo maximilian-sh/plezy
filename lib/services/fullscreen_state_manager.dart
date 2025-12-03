@@ -1,6 +1,8 @@
-import 'dart:io' show Platform;
+import 'platform_specific/platform_helper.dart' show Platform;
 import 'package:flutter/foundation.dart';
-import 'package:window_manager/window_manager.dart';
+import 'platform_specific/window_manager_helper.dart';
+
+import 'platform_specific/web_fullscreen_helper.dart';
 
 /// Global manager for tracking fullscreen state across the app
 class FullscreenStateManager extends ChangeNotifier with WindowListener {
@@ -57,6 +59,24 @@ class FullscreenStateManager extends ChangeNotifier with WindowListener {
   @override
   void onWindowLeaveFullScreen() {
     setFullscreen(false);
+  }
+
+  /// Toggle fullscreen mode
+  Future<void> toggleFullscreen() async {
+    if (kIsWeb) {
+      toggleWebFullscreen();
+      // Since we can't easily detect fullscreen changes on web without more complex listeners,
+      // we might need to manually toggle the state here or add a listener in the helper.
+      // For now, we'll assume the toggle works and flip the state.
+      // In a real implementation, we should listen to 'fullscreenchange' event.
+      setFullscreen(!_isFullscreen);
+    } else {
+      if (await windowManager.isFullScreen()) {
+        await windowManager.setFullScreen(false);
+      } else {
+        await windowManager.setFullScreen(true);
+      }
+    }
   }
 
   @override

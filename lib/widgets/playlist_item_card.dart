@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/plex_image.dart';
 import '../client/plex_client.dart';
 import '../mixins/keyboard_long_press_mixin.dart';
 import '../models/plex_metadata.dart';
@@ -172,7 +172,7 @@ class _PlaylistItemCardState extends State<PlaylistItemCard>
 
           return ClipRRect(
             borderRadius: BorderRadius.circular(6),
-            child: CachedNetworkImage(
+            child: PlexImage(
               imageUrl: client.getThumbnailUrl(posterUrl),
               width: 60,
               height: 90,

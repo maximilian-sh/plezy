@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:io' show Platform;
-import 'package:window_manager/window_manager.dart';
+import 'services/platform_specific/platform_helper.dart' show Platform;
+import 'services/platform_specific/window_manager_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'screens/main_screen.dart';

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../client/plex_client.dart';
 import '../models/plex_media_info.dart';
 import '../models/plex_metadata.dart';
@@ -23,6 +24,8 @@ class PlaybackInitializationService {
       final playbackData = await client.getVideoPlaybackData(
         metadata.ratingKey,
         mediaIndex: selectedMediaIndex,
+        transcodeProtocol: kIsWeb ? 'hls' : null,
+        startTime: metadata.viewOffset,
       );
 
       if (!playbackData.hasValidVideoUrl) {

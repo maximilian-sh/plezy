@@ -1,4 +1,5 @@
-import 'dart:io' show Platform;
+import 'dart:io'
+    if (dart.library.html) '../../../../services/platform_specific/platform_stub.dart';
 
 import 'package:flutter/material.dart';
 

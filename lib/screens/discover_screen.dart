@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/plex_image.dart';
 import 'package:provider/provider.dart';
 import '../client/plex_client.dart';
 import '../models/plex_metadata.dart';
@@ -1024,7 +1024,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                       child: Builder(
                         builder: (context) {
                           final client = _getClientForItem(heroItem);
-                          return CachedNetworkImage(
+                          return PlexImage(
                             imageUrl: client.getThumbnailUrl(
                               heroItem.art ?? heroItem.grandparentArt,
                             ),
@@ -1103,7 +1103,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                             child: Builder(
                               builder: (context) {
                                 final client = _getClientForItem(heroItem);
-                                return CachedNetworkImage(
+                                return PlexImage(
                                   imageUrl: client.getThumbnailUrl(
                                     heroItem.clearLogo,
                                   ),

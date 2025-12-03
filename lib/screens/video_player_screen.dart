@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:io';
+import '../services/platform_specific/platform_helper.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1212,7 +1213,8 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
       },
       child: Scaffold(
         // Use transparent background on macOS when native video layer is active
-        backgroundColor: Colors.transparent,
+        // On web, use black to avoid white borders
+        backgroundColor: kIsWeb ? Colors.black : Colors.transparent,
         body: GestureDetector(
           behavior: HitTestBehavior
               .translucent, // Allow taps to pass through to controls

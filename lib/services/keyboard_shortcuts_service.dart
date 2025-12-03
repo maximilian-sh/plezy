@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
+import 'platform_specific/hotkey_manager_helper.dart';
 import '../mpv/mpv.dart';
 import 'settings_service.dart';
 import '../utils/keyboard_utils.dart';
@@ -109,7 +109,7 @@ class KeyboardShortcutsService {
     }
 
     // Format the key name
-    String keyName = hotKey.key.keyLabel;
+    String keyName = hotKey.key.debugName ?? '';
     if (keyName.startsWith('PhysicalKeyboardKey#')) {
       keyName = keyName.substring(20, keyName.length - 1);
     }

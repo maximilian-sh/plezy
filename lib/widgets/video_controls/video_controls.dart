@@ -1,11 +1,11 @@
 import 'dart:async' show StreamSubscription, Timer;
-import 'dart:io' show Platform;
+import '../../services/platform_specific/platform_helper.dart' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:rate_limiter/rate_limiter.dart';
 import 'package:flutter/services.dart' show SystemChrome, DeviceOrientation;
-import 'package:macos_window_utils/macos_window_utils.dart';
-import 'package:window_manager/window_manager.dart';
+import '../../services/platform_specific/macos_window_utils_helper.dart';
+import '../../services/platform_specific/window_manager_helper.dart';
 
 import '../../mpv/mpv.dart';
 

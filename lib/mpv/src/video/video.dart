@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/foundation.dart';
+import 'package:video_player/video_player.dart';
+import '../player/platform/player_web.dart';
+
 import '../player/player.dart';
 import '../player/video_rect_support.dart';
 
@@ -49,7 +53,7 @@ class _VideoState extends State<Video> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
+      color: widget.backgroundColor,
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -64,6 +68,20 @@ class _VideoState extends State<Video> {
   }
 
   Widget _buildVideoSurface() {
+    if (kIsWeb && widget.player is PlayerWeb) {
+      final controller = (widget.player as PlayerWeb).controller;
+      if (controller != null && controller.value.isInitialized) {
+        return FittedBox(
+          fit: widget.fit,
+          child: SizedBox(
+            width: controller.value.size.width,
+            height: controller.value.size.height,
+            child: VideoPlayer(controller),
+          ),
+        );
+      }
+    }
+
     // For players that support video rect positioning (Windows, Linux),
     // communicate layout changes to the native side.
     if (widget.player is VideoRectSupport) {

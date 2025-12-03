@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
+import 'platform_specific/hotkey_manager_helper.dart';
 import 'package:plezy/utils/app_logger.dart';
 import '../i18n/strings.g.dart';
 
@@ -72,6 +72,7 @@ class SettingsService {
     final modeString = _prefs.getString(_keyThemeMode);
     return ThemeMode.values.firstWhere(
       (mode) => mode.name == modeString,
+      // Default to system theme
       orElse: () => ThemeMode.system,
     );
   }

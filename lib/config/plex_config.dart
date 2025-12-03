@@ -1,4 +1,5 @@
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class PlexConfig {
   final String baseUrl;
@@ -55,7 +56,7 @@ class PlexConfig {
       'X-Plex-Platform': platform,
       if (device != null) 'X-Plex-Device': device!,
       if (acceptJson) 'Accept': 'application/json',
-      'Accept-Charset': 'utf-8',
+      if (!kIsWeb) 'Accept-Charset': 'utf-8',
     };
 
     if (token != null) {

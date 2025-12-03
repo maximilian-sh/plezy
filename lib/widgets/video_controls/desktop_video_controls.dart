@@ -1,8 +1,10 @@
-import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
+import '../../services/platform_specific/platform_helper.dart';
 
 import 'package:flutter/material.dart';
 
 import '../../mpv/mpv.dart';
+
 import '../../models/plex_media_info.dart';
 import '../../models/plex_metadata.dart';
 import '../../services/fullscreen_state_manager.dart';
@@ -302,10 +304,39 @@ class DesktopVideoControls extends StatelessWidget {
               const SizedBox(width: 16),
               // Audio track, subtitle, and chapter controls
               trackChapterControls,
+              if (kIsWeb) ...[
+                const SizedBox(width: 16),
+                _buildFullscreenButton(),
+              ],
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildFullscreenButton() {
+    return ListenableBuilder(
+      listenable: FullscreenStateManager(),
+      builder: (context, _) {
+        final isFullscreen = FullscreenStateManager().isFullscreen;
+        return Semantics(
+          label: isFullscreen
+              ? t.videoControls.exitFullscreenButton
+              : t.videoControls.fullscreenButton,
+          button: true,
+          excludeSemantics: true,
+          child: IconButton(
+            icon: Icon(
+              isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              FullscreenStateManager().toggleFullscreen();
+            },
+          ),
+        );
+      },
     );
   }
 }

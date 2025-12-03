@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
+import '../providers/plex_client_provider.dart';
+import '../widgets/plex_image.dart';
 import '../models/plex_home_user.dart';
 import '../i18n/strings.g.dart';
 
@@ -118,14 +121,29 @@ class UserAvatarWidget extends StatelessWidget {
         children: [
           // Avatar image
           ClipOval(
-            child: CachedNetworkImage(
-              imageUrl: user.thumb,
-              width: size,
-              height: size,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => _buildPlaceholderAvatar(theme),
-              errorWidget: (context, url, error) =>
-                  _buildPlaceholderAvatar(theme),
+            child: Consumer<PlexClientProvider>(
+              builder: (context, clientProvider, _) {
+                String imageUrl = user.thumb;
+                if (kIsWeb &&
+                    imageUrl.startsWith('http') &&
+                    clientProvider.client != null) {
+                  // Proxy external images through local server to avoid CORS on web
+                  final client = clientProvider.client!;
+                  final encodedUrl = Uri.encodeComponent(imageUrl);
+                  imageUrl =
+                      '${client.config.baseUrl}/photo/:/transcode?url=$encodedUrl&width=${size.toInt()}&height=${size.toInt()}&X-Plex-Token=${client.config.token}';
+                }
+
+                return PlexImage(
+                  imageUrl: imageUrl,
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => _buildPlaceholderAvatar(theme),
+                  errorWidget: (context, url, error) =>
+                      _buildPlaceholderAvatar(theme),
+                );
+              },
             ),
           ),
 
