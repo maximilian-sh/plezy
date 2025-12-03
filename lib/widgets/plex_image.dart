@@ -13,6 +13,8 @@ class PlexImage extends StatelessWidget {
   final double? height;
   final Alignment alignment;
   final FilterQuality filterQuality;
+  final int? memCacheWidth;
+  final int? memCacheHeight;
 
   const PlexImage({
     super.key,
@@ -24,6 +26,8 @@ class PlexImage extends StatelessWidget {
     this.height,
     this.alignment = Alignment.center,
     this.filterQuality = FilterQuality.low,
+    this.memCacheWidth,
+    this.memCacheHeight,
   });
 
   @override
@@ -36,6 +40,8 @@ class PlexImage extends StatelessWidget {
         height: height,
         alignment: alignment,
         filterQuality: filterQuality,
+        cacheWidth: memCacheWidth,
+        cacheHeight: memCacheHeight,
         loadingBuilder: placeholder != null
             ? (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
@@ -59,6 +65,8 @@ class PlexImage extends StatelessWidget {
       filterQuality: filterQuality,
       placeholder: placeholder,
       errorWidget: errorWidget,
+      memCacheWidth: memCacheWidth,
+      memCacheHeight: memCacheHeight,
     );
   }
 }
