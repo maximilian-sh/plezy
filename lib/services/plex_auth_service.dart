@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'storage_service.dart';
 import '../client/plex_client.dart';
 import '../models/plex_user_profile.dart';
+import 'package:flutter/foundation.dart';
 import '../models/plex_home.dart';
 import '../models/user_switch_response.dart';
 import '../utils/app_logger.dart';
@@ -652,12 +653,15 @@ class PlexServer {
 
       // For HTTPS connections, also add HTTP direct IP as fallback
       // This provides backward compatibility and fallback for cert issues
-      if (isHttps) {
+      // BUT skip this if we are on secure web, as mixed content is blocked
+      final isSecureWeb = kIsWeb && Uri.base.scheme == 'https';
+      if (isHttps && !isSecureWeb) {
         addCandidate(connection, connection.httpDirectUrl, false, false);
       }
     }
 
-    return [
+    // Filter out insecure candidates if on secure web
+    final allCandidates = [
       ...httpsLocal,
       ...httpsRemote,
       ...httpsRelay,
@@ -665,6 +669,12 @@ class PlexServer {
       ...httpRemote,
       ...httpRelay,
     ];
+
+    if (kIsWeb && Uri.base.scheme == 'https') {
+      return allCandidates.where((c) => c.isHttps).toList();
+    }
+
+    return allCandidates;
   }
 
   List<String> prioritizedEndpointUrls({String? preferredFirst}) {

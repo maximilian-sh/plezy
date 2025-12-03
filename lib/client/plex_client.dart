@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-
+import 'package:flutter/foundation.dart';
 import '../config/plex_config.dart';
 import '../models/play_queue_response.dart';
 import '../models/plex_file_info.dart';
@@ -925,10 +925,10 @@ class PlexClient {
               'subtitleSize': '100',
               'audioBoost': '100',
               'location': 'lan',
-              'X-Plex-Platform': 'Chrome',
-              'X-Plex-Platform-Version': '1.0',
-              'X-Plex-Product': 'Plezy',
-              'X-Plex-Device': 'Web',
+              'X-Plex-Platform': kIsWeb ? 'Web' : config.platform,
+              'X-Plex-Platform-Version': config.version,
+              'X-Plex-Product': config.product,
+              'X-Plex-Device': kIsWeb ? 'Web' : (config.device ?? 'Generic'),
               'X-Plex-Token': config.token,
             };
             final queryString = params.entries

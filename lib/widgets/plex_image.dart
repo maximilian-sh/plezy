@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'web_image.dart';
 
 /// A wrapper around CachedNetworkImage that uses Image.network on web
 /// to avoid CORS issues with external images.
@@ -33,26 +34,11 @@ class PlexImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
-      return Image.network(
-        imageUrl,
+      return WebImage(
+        imageUrl: imageUrl,
         fit: fit,
         width: width,
         height: height,
-        alignment: alignment,
-        filterQuality: filterQuality,
-        cacheWidth: memCacheWidth,
-        cacheHeight: memCacheHeight,
-        loadingBuilder: placeholder != null
-            ? (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return placeholder!(context, imageUrl);
-              }
-            : null,
-        errorBuilder: errorWidget != null
-            ? (context, error, stackTrace) {
-                return errorWidget!(context, imageUrl, error);
-              }
-            : null,
       );
     }
 
